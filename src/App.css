@@ -34,14 +34,13 @@
   padding: 0;
   list-style: none;
   display: flex;
-  flex-wrap: wrap;
+  /*flex-wrap: wrap;*/
 }
 .file-item {
-  width: calc(33% - 20px);
-  height: 300px;
-  border: 1px solid #eaeaea;
+  /*width: calc(33% - 20px);
+  height: 300px;*/
+  border: 1px solid #999999;
   border-radius: 4px;
-  margin: 10px;
   cursor: move;
   transition: all 0.2s linear;
 }
