@@ -49,19 +49,20 @@ const Image = ({ image, index, moveImage }) => {
 const ImageList = ({ images, moveImage }) => {
   const renderImage = (image, index) => {
     return (
-      <div>
+      <div key={`${image.id}-image`}>
         <center>{image.id}</center>
-        <Image
-          image={image}
-          index={index}
-          key={`${image.id}-image`}
-          moveImage={moveImage}
-        />
+        <Image image={image} index={index} moveImage={moveImage} />
       </div>
     );
   };
 
-  return <section className="file-list">{images.map(renderImage)}</section>;
+  return (
+    <section className="file-list">
+      {images
+        .filter(item => !item.visible || item.visible === true)
+        .map(renderImage)}
+    </section>
+  );
 };
 
 export default ImageList;

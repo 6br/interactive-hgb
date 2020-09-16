@@ -1,9 +1,9 @@
-import React, { useCallback, useState } from "react";
+import React, { useReducer, useState } from "react";
 import { DndProvider } from "react-dnd";
 import HTML5Backend from "react-dnd-html5-backend";
 import TouchBackend from "react-dnd-touch-backend";
 import update from "immutability-helper";
-import cuid from "cuid";
+//import cuid from "cuid";
 import { Graph } from "react-d3-graph";
 
 //import Dropzone from "./Dropzone";
@@ -18,10 +18,8 @@ const eachCons = (array, num) => {
     array.slice(i, i + num)
   );
 };
-let list = eachCons(
-  [210142, 210143, 210144, 596, 210145, 210146, 210147, 210148],
-  2
-).map(pair => {
+const nodes = [210142, 210143, 210144, 596, 210145, 210146, 210147, 210148];
+let list = eachCons(nodes, 2).map(pair => {
   return { source: pair[0], target: pair[1] };
 });
 list.push({ source: 210144, target: 210145 });
@@ -104,29 +102,29 @@ const config = {
 
 const data_const = {
   links: list,
-  nodes: [210142, 210143, 210144, 596, 210145, 210146, 210147, 210148].map(
-    (image, index) => {
-      return { id: image, name: image, x: index * 100 + 100, y: 50 };
-    }
-  )
+  nodes: nodes.map((image, index) => {
+    return { id: image, name: image, x: index * 100 + 100, y: 50 };
+  })
+};
+
+const dataReducer = (state, action) => {
+  if (action.type === "flip") {
+    let modData = state.nodes;
+    let selectNode = modData.filter(item => {
+      return item.id === parseInt(action.nodeId);
+    });
+    selectNode.forEach(item => {
+      if (item.color && item.color === "gray") item.color = "blue";
+      else item.color = "gray";
+    });
+    return { ...state, nodes: modData };
+  }
 };
 
 function App() {
   const [images, setImages] = useState(images_const);
-  const [data, setData] = useState(data_const);
-  const onDrop = useCallback(acceptedFiles => {
-    acceptedFiles.map(file => {
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        setImages(prevState => [
-          ...prevState,
-          { id: cuid(), src: e.target.result }
-        ]);
-      };
-      reader.readAsDataURL(file);
-      return file;
-    });
-  }, []);
+  //const [data, setData] = useState(data_const);
+  const [data, dataDispatch] = useReducer(dataReducer, data_const);
 
   const moveImage = (dragIndex, hoverIndex) => {
     const draggedImage = images[dragIndex];
@@ -140,18 +138,48 @@ function App() {
     );
   };
 
+  const flipImage = nodeId => {
+    /*let flipImage = images.filter((item) => item.nodeId === parseInt(nodeId));
+    flipImage.forEach(item => {
+      if (item.color && item.color === "gray") item.visible = true;
+      else item.visible = false;
+    });*/
+
+    setImages(
+      update(images, {
+        $apply: function(item) {
+          if (item.id === parseInt(nodeId)) {
+            if (item.visible && item.color === "gray") item.visible = true;
+            else item.visible = false;
+            return item;
+          } else {
+            return item;
+          }
+        }
+      })
+    );
+  };
+
   const onDoubleClickNode = function(nodeId) {
+    dataDispatch({
+      type: "flip",
+      nodeId
+    });
+    flipImage(nodeId);
     //let modData = { ...reactRef.state.data };
+
+    /*
     let modData = data;
     let selectNode = modData.nodes.filter(item => {
-      return item.id === nodeId;
+      return item.id === parseInt(nodeId);
     });
     selectNode.forEach(item => {
-      if (item.color && item.color === "red") item.color = "blue";
-      else item.color = "red";
+      if (item.color && item.color === "gray") item.color = "blue";
+      else item.color = "gray";
     });
-    console.log(selectNode);
-    setData(modData);
+    //console.log(modData.nodes, parseInt(nodeId), selectNode);
+    setData(_ => modData);
+    */
     //    reactRef.setState({ data: modData });
   };
 
