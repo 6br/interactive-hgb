@@ -1,6 +1,6 @@
 .App {
-  max-width: 960px;
-  margin: 10px auto;
+  /*max-width: 960px;*/
+  margin: 20px;
 }
 
 .text-center {
@@ -43,10 +43,16 @@
   /*border-radius: 4px;*/
   cursor: move;
   transition: all 0.2s linear;
+  /*max-height: 250px;*/
 }
 .file-img {
   width: 100%;
   height: 100%;
+}
+
+center {
+  position: absolute;
+  transform: translateY(-20px);
 }
 
 /* Tablets */

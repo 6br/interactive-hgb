@@ -18,23 +18,45 @@ const eachCons = (array, num) => {
     array.slice(i, i + num)
   );
 };
-const nodes = [210142, 210143, 210144, 596, 210145, 210146, 210147, 210148];
+
+/* User-defined information */
+//const dir = "/g/g2/"
+//const nodes = [210142, 210143, 210144, 596, 210145, 210146, 210147, 210148];
+//const additionalEdges = [[210144, 210145]]
+
+//const dir = "/g/g3";
+//const nodes = [718590, 718591, 718592, 1326, 718593, 718594, 718595, 718596];
+//const additionalEdges = [[718592, 718593]];
+
+//const dir = "/g/g4";
+//const nodes = [658283, 658284, 1240, 658285, 658286, 658287, 658288]
+//const additionalEdges = [[658284, 658285]];
+
+//const dir = "/g/g5";
+//const nodes = [901119, 901120, 901121, 1607, 901122, 901123, 901124]
+//const additionalEdges = [[901121, 901122]];
+const prefix = "_3"; //"_4"
+
+//const dir = "/g/g6";
+//const nodes = [ 790075, 790076, 1442 ,1443, 1444, 790077 ,790078, 790079, 790080]
+//const additionalEdges = [[790076,1443],[1443,790077]];
+
+const dir = "/g/g7";
+const nodes = [790068, 790069, 790070, 1440, 790071, 790072, 790073, 790074];
+const additionalEdges = [[790070, 790071]];
+
+//const nodes = []
+
+const nodeWidth = 200;
 let list = eachCons(nodes, 2).map(pair => {
   return { source: pair[0], target: pair[1] };
 });
-list.push({ source: 210144, target: 210145 });
+additionalEdges.forEach(edge => {
+  list.push({ source: edge[0], target: edge[1] });
+});
 
-const images_const = [
-  210142,
-  210143,
-  210144,
-  596,
-  210145,
-  210146,
-  210147,
-  210148
-].map(image => {
-  return { id: image, src: `/g/g2/${image}.png` };
+const images_const = nodes.map(image => {
+  return { id: image, src: `${dir}/${image}${prefix}.png`, visible: true };
 });
 const config = {
   automaticRearrangeAfterDropNode: false,
@@ -52,7 +74,7 @@ const config = {
   panAndZoom: false,
   staticGraph: false,
   staticGraphWithDragAndDrop: true,
-  width: images_const.length * 100 + 200,
+  width: images_const.length * nodeWidth + nodeWidth,
   d3: {
     alphaTarget: 0.05,
     gravity: -400,
@@ -103,7 +125,7 @@ const config = {
 const data_const = {
   links: list,
   nodes: nodes.map((image, index) => {
-    return { id: image, name: image, x: index * 100 + 100, y: 50 };
+    return { id: image, name: image, x: index * nodeWidth + 100, y: 70 };
   })
 };
 
@@ -139,17 +161,19 @@ function App() {
   };
 
   const flipImage = nodeId => {
-    /*let flipImage = images.filter((item) => item.nodeId === parseInt(nodeId));
+    let cloneImages = images;
+    let flipImage = cloneImages.filter(item => item.id === parseInt(nodeId));
     flipImage.forEach(item => {
-      if (item.color && item.color === "gray") item.visible = true;
+      if (item.visible === false) item.visible = true;
       else item.visible = false;
-    });*/
+    });
 
-    setImages(
+    /*setImages(
       update(images, {
         $apply: function(item) {
+          console.log(item)
           if (item.id === parseInt(nodeId)) {
-            if (item.visible && item.color === "gray") item.visible = true;
+            if (item.visible && item.visible === false) item.visible = true;
             else item.visible = false;
             return item;
           } else {
@@ -157,15 +181,17 @@ function App() {
           }
         }
       })
-    );
+    );*/
+    //console.log(cloneImages);
+    setImages(cloneImages);
   };
 
   const onDoubleClickNode = function(nodeId) {
+    flipImage(nodeId);
     dataDispatch({
       type: "flip",
       nodeId
     });
-    flipImage(nodeId);
     //let modData = { ...reactRef.state.data };
 
     /*
@@ -197,7 +223,11 @@ function App() {
         config={config}
       />
       <DndProvider backend={backendForDND}>
-        <ImageList images={images} moveImage={moveImage} />
+        <ImageList
+          images={images}
+          moveImage={moveImage}
+          onDoubleClickNode={onDoubleClickNode}
+        />
       </DndProvider>
     </main>
   );

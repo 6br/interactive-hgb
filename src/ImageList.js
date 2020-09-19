@@ -3,7 +3,7 @@ import { useDrag, useDrop } from "react-dnd";
 
 const type = "Image"; // Need to pass which type element can be draggable
 
-const Image = ({ image, index, moveImage }) => {
+const Image = ({ image, index, moveImage, onDoubleClick }) => {
   const ref = useRef(null);
 
   const [, drop] = useDrop({
@@ -46,10 +46,15 @@ const Image = ({ image, index, moveImage }) => {
   );
 };
 
-const ImageList = ({ images, moveImage }) => {
+const ImageList = ({ images, moveImage, onDoubleClickNode }) => {
   const renderImage = (image, index) => {
     return (
-      <div key={`${image.id}-image`}>
+      <div
+        key={`${image.id}-image`}
+        onDoubleClick={() => {
+          onDoubleClickNode(image.id);
+        }}
+      >
         <center>{image.id}</center>
         <Image image={image} index={index} moveImage={moveImage} />
       </div>
@@ -59,7 +64,7 @@ const ImageList = ({ images, moveImage }) => {
   return (
     <section className="file-list">
       {images
-        .filter(item => !item.visible || item.visible === true)
+        .filter(item => item.visible === null || item.visible === true)
         .map(renderImage)}
     </section>
   );
