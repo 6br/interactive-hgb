@@ -43,6 +43,7 @@ const prefix = "_3"; //"_4"
 
 const dir = "/g/g7";
 const nodes = [790068, 790069, 790070, 1440, 790071, 790072, 790073, 790074];
+const nodeLength = [256, 256, 150, 110, 256, 256, 256, 256]; // Dummy data.
 const additionalEdges = [[790070, 790071]];
 
 //const nodes = []
@@ -54,6 +55,23 @@ let list = eachCons(nodes, 2).map(pair => {
 additionalEdges.forEach(edge => {
   list.push({ source: edge[0], target: edge[1] });
 });
+
+function generateNode(node) {
+  let max_length = 200;
+  let node_length = node.length / 5;
+  let left_padding = (max_length - node_length) / 2;
+  return (
+    <div
+      style={{
+        width: node_length,
+        height: "20px",
+        marginTop: "90px",
+        marginLeft: left_padding,
+        backgroundColor: node.color
+      }}
+    ></div>
+  );
+}
 
 const images_const = nodes.map(image => {
   return { id: image, src: `${dir}/${image}${prefix}.png`, visible: true };
@@ -96,11 +114,12 @@ const config = {
     mouseCursor: "pointer",
     opacity: 1,
     renderLabel: true,
-    size: 500,
+    size: 2000,
     strokeColor: "none",
     strokeWidth: 2,
     svg: "",
-    symbolType: "circle"
+    symbolType: "square",
+    viewGenerator: generateNode
   },
   link: {
     color: "#d3d3d3",
@@ -125,7 +144,14 @@ const config = {
 const data_const = {
   links: list,
   nodes: nodes.map((image, index) => {
-    return { id: image, name: image, x: index * nodeWidth + 100, y: 70 };
+    return {
+      id: image,
+      name: image,
+      x: index * nodeWidth + 100,
+      y: 70,
+      length: nodeLength[index],
+      color: "blue"
+    };
   })
 };
 
