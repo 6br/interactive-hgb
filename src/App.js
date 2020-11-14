@@ -43,7 +43,7 @@ const prefix = "_3"; //"_4"
 
 const dir = "/g/g7";
 const nodes = [790068, 790069, 790070, 1440, 790071, 790072, 790073, 790074];
-const nodeLength = [256, 256, 150, 110, 256, 256, 256, 256]; // Dummy data.
+const nodeLength = [255, 255, 157, 115, 256, 256, 256, 256]; // Dummy data.
 const additionalEdges = [[790070, 790071]];
 
 //const nodes = []
