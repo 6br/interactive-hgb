@@ -9,6 +9,7 @@ import { Graph } from "react-d3-graph";
 //import Dropzone from "./Dropzone";
 import ImageList from "./ImageList";
 import { isTouchDevice } from "./utils";
+import "./";
 
 import "./App.css";
 
@@ -35,38 +36,38 @@ const eachCons = (array, num) => {
 //const dir = "/g/g5";
 //const nodes = [901119, 901120, 901121, 1607, 901122, 901123, 901124]
 //const additionalEdges = [[901121, 901122]];
-const prefix = "_3"; //"_4"
+const prefix = ""; //"_4"
 
 //const dir = "/g/g6";
 //const nodes = [ 790075, 790076, 1442 ,1443, 1444, 790077 ,790078, 790079, 790080]
 //const additionalEdges = [[790076,1443],[1443,790077]];
 
-const dir = "/g/g7";
-const nodes = [790068, 790069, 790070, 1440, 790071, 790072, 790073, 790074];
-const nodeLength = [255, 255, 157, 115, 256, 256, 256, 256]; // Dummy data.
-const additionalEdges = [[790070, 790071]];
+//const dir = "/g/g7";
+//const nodes = [790068, 790069, 790070, 1440, 790071, 790072, 790073, 790074];
+//const nodeLength = [255, 255, 157, 115, 256, 256, 256, 256]; // Dummy data.
+//const additionalEdges = [[790070, 790071]];
+const read_max = 22;
+const dir = "dnd";
+const nodes = [...Array(read_max)].map((_, i) => i);
 
 //const nodes = []
 
-const nodeWidth = 200;
+const nodeWidth = 60;
 let list = eachCons(nodes, 2).map(pair => {
   return { source: pair[0], target: pair[1] };
 });
-additionalEdges.forEach(edge => {
-  list.push({ source: edge[0], target: edge[1] });
-});
 
 function generateNode(node) {
-  let max_length = 200;
-  let node_length = node.length / 5;
-  let left_padding = (max_length - node_length) / 2;
+  let node_length = 20;
+  //let left_padding = (max_length - node_length) / 2;
   return (
     <div
       style={{
         width: node_length,
-        height: "20px",
-        marginTop: "90px",
-        marginLeft: left_padding,
+        height: node_length,
+        marginTop: "50px",
+        marginLeft: "50px",
+        //transform: "translate(100,0)",
         backgroundColor: node.color
       }}
     ></div>
@@ -76,6 +77,7 @@ function generateNode(node) {
 const images_const = nodes.map(image => {
   return { id: image, src: `${dir}/${image}${prefix}.png`, visible: true };
 });
+
 const config = {
   automaticRearrangeAfterDropNode: false,
   collapsible: false,
@@ -114,7 +116,7 @@ const config = {
     mouseCursor: "pointer",
     opacity: 1,
     renderLabel: true,
-    size: 2000,
+    size: 1000,
     strokeColor: "none",
     strokeWidth: 2,
     svg: "",
@@ -147,9 +149,9 @@ const data_const = {
     return {
       id: image,
       name: image,
-      x: index * nodeWidth + 100,
+      x: index * nodeWidth,
       y: 70,
-      length: nodeLength[index],
+      //length: nodeLength[index],
       color: "blue"
     };
   })
@@ -237,11 +239,8 @@ function App() {
 
   return (
     <main className="App">
-      {/*<h2 className="text-center">Graph Genome Browser Example</h2>*/}
+      {<h2 className="text-center">Genome Browser Example</h2>}
       {/*<Dropzone onDrop={onDrop} accept={"image/*"} />*/}
-      {/*images && images.length > 0 && (
-        <h3 className="text-center">Drag the Images to change positions</h3>
-      )*/}
       <Graph
         id="graph-id" // id is mandatory, if no id is defined rd3g will throw an error
         onDoubleClickNode={onDoubleClickNode}

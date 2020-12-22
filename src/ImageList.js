@@ -55,7 +55,7 @@ const ImageList = ({ images, moveImage, onDoubleClickNode }) => {
           onDoubleClickNode(image.id);
         }}
       >
-        <center>{image.id}</center>
+        <center style={{ fontSize: "15px" }}>{image.id}</center>
         <Image image={image} index={index} moveImage={moveImage} />
       </div>
     );

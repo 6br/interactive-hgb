@@ -34,15 +34,18 @@
   padding: 0;
   list-style: none;
   display: flex;
-  /*flex-wrap: wrap;*/
+  flex-wrap: wrap;
+  font-size: 0px;
 }
 .file-item {
   /*width: calc(33% - 20px);
   height: 300px;*/
-  border: 1px solid #999999;
+  /*border: 1px solid #999999;*/
+  border: none;
   /*border-radius: 4px;*/
   cursor: move;
   transition: all 0.2s linear;
+  /*height: 20px;*/
   /*max-height: 250px;*/
 }
 .file-img {
@@ -52,7 +55,6 @@
 
 center {
   position: absolute;
-  transform: translateY(-20px);
 }
 
 /* Tablets */
@@ -62,7 +64,6 @@ center {
   }
   .file-item {
     width: calc(50% - 22px);
-    height: 200px;
   }
 }
 
@@ -74,6 +75,5 @@ center {
   }
   .file-item {
     width: calc(100% - 22px);
-    height: 200px;
   }
 }
