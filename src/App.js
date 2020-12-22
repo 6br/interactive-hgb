@@ -1,9 +1,9 @@
-import React, { useReducer, useState } from "react";
+import React, { useReducer, useState, createRef } from "react";
 import { DndProvider } from "react-dnd";
 import HTML5Backend from "react-dnd-html5-backend";
 import TouchBackend from "react-dnd-touch-backend";
 import update from "immutability-helper";
-//import cuid from "cuid";
+import { useScreenshot } from "use-react-screenshot";
 import { Graph } from "react-d3-graph";
 
 //import Dropzone from "./Dropzone";
@@ -175,6 +175,9 @@ function App() {
   const [images, setImages] = useState(images_const);
   //const [data, setData] = useState(data_const);
   const [data, dataDispatch] = useReducer(dataReducer, data_const);
+  const ref = createRef(null);
+  const [image, takeScreenshot] = useScreenshot();
+  const getImage = () => takeScreenshot(ref.current);
 
   const moveImage = (dragIndex, hoverIndex) => {
     const draggedImage = images[dragIndex];
@@ -239,7 +242,7 @@ function App() {
 
   return (
     <main className="App">
-      {<h2 className="text-center">Genome Browser Example</h2>}
+      {/*<h2 className="text-center">Genome Browser Example</h2>*/}
       {/*<Dropzone onDrop={onDrop} accept={"image/*"} />*/}
       <Graph
         id="graph-id" // id is mandatory, if no id is defined rd3g will throw an error
@@ -247,13 +250,19 @@ function App() {
         data={data}
         config={config}
       />
-      <DndProvider backend={backendForDND}>
-        <ImageList
-          images={images}
-          moveImage={moveImage}
-          onDoubleClickNode={onDoubleClickNode}
-        />
-      </DndProvider>
+      <div ref={ref}>
+        <DndProvider backend={backendForDND}>
+          <ImageList
+            images={images}
+            moveImage={moveImage}
+            onDoubleClickNode={onDoubleClickNode}
+          />
+        </DndProvider>
+      </div>
+      <button style={{ marginBottom: "10px" }} onClick={getImage}>
+        Save image
+      </button>
+      <img src={image} alt={"Screenshot"} />
     </main>
   );
 }
