@@ -179,7 +179,8 @@ const dataReducer = (state, action) => {
 
 function App() {
   const [images, setImages] = useState(images_const);
-  //const [data, setData] = useState(data_const);
+  const data_const2 = JSON.stringify(images);
+  const [images_str, setStr] = useState(data_const2);
   const [data, dataDispatch] = useReducer(dataReducer, data_const);
   const ref = createRef(null);
   const [image, takeScreenshot] = useScreenshot();
@@ -195,6 +196,7 @@ function App() {
         ]
       })
     );
+    setStr(JSON.stringify(images));
   };
 
   const flipImage = nodeId => {
@@ -221,6 +223,7 @@ function App() {
     );*/
     //console.log(cloneImages);
     setImages(cloneImages);
+    setStr(JSON.stringify(cloneImages));
   };
 
   const onDoubleClickNode = function(nodeId) {
@@ -229,27 +232,10 @@ function App() {
       type: "flip",
       nodeId
     });
-    //let modData = { ...reactRef.state.data };
-
-    /*
-    let modData = data;
-    let selectNode = modData.nodes.filter(item => {
-      return item.id === parseInt(nodeId);
-    });
-    selectNode.forEach(item => {
-      if (item.color && item.color === "gray") item.color = "blue";
-      else item.color = "gray";
-    });
-    //console.log(modData.nodes, parseInt(nodeId), selectNode);
-    setData(_ => modData);
-    */
-    //    reactRef.setState({ data: modData });
   };
 
   return (
     <main className="App">
-      {/*<h2 className="text-center">Genome Browser Example</h2>*/}
-      {/*<Dropzone onDrop={onDrop} accept={"image/*"} />*/}
       <Graph
         id="graph-id" // id is mandatory, if no id is defined rd3g will throw an error
         onDoubleClickNode={onDoubleClickNode}
@@ -268,6 +254,33 @@ function App() {
       <button style={{ marginBottom: "10px" }} onClick={getImage}>
         Save image
       </button>
+      <div>
+        <input
+          type="text"
+          name="atext"
+          style={{ width: "100%" }}
+          value={images_str}
+          onChange={e =>
+            setStr(
+              //update(images_str,
+              e.target.value
+              //)
+            )
+          }
+        />
+        <button
+          style={{ marginBottom: "10px" }}
+          onClick={() =>
+            setImages(
+              //update(images,
+              JSON.parse(images_str)
+              //)
+            )
+          }
+        >
+          Update state
+        </button>
+      </div>
       <img src={image} alt={"Screenshot"} />
     </main>
   );
