@@ -46,13 +46,19 @@ const prefix = ""; //"_4"
 //const nodes = [790068, 790069, 790070, 1440, 790071, 790072, 790073, 790074];
 //const nodeLength = [255, 255, 157, 115, 256, 256, 256, 256]; // Dummy data.
 //const additionalEdges = [[790070, 790071]];
-const read_max = 22;
+/*fetch('./dnd/reads.json').then(function(response){
+  console.log(response)
+  return response.json();
+})      .then(function(myJson) {
+  console.log(myJson);
+});*/
+const read_max = 110;
 const dir = "dnd";
 const nodes = [...Array(read_max)].map((_, i) => i);
 
 //const nodes = []
 
-const nodeWidth = 60;
+const nodeWidth = 50;
 let list = eachCons(nodes, 2).map(pair => {
   return { source: pair[0], target: pair[1] };
 });

@@ -41,7 +41,12 @@ const Image = ({ image, index, moveImage, onDoubleClick }) => {
       style={{ opacity: isDragging ? 0 : 1 }}
       className="file-item"
     >
-      <img alt={`img - ${image.id}`} src={image.src} className="file-img" />
+      <img
+        alt={`img - ${image.id}`}
+        src={image.src}
+        className="file-img"
+        onError={e => (e.target.style.display = "none")}
+      />
     </div>
   );
 };
